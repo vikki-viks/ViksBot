@@ -3,13 +3,19 @@ const Telegrambot = require("node-telegram-bot-api");
 
 const token = process.env.TOKEN;
 const chats = {};
+const message = {};
 const bot = new Telegrambot(token, { polling: true });
 const { gameOptions, againOptions } = require("./options");
 
 const startGame = async (chatId) => {
   const random = Math.floor(Math.random() * 10);
   chats[chatId] = random;
-  await bot.sendMessage(chatId, "Отгадай цифру от 0 до 9", gameOptions);
+  const messageKeyBoard = await bot.sendMessage(
+    chatId,
+    "Отгадай цифру от 0 до 9",
+    gameOptions
+  );
+  message[chatId] = messageKeyBoard.message_id;
 };
 const start = () => {
   bot.setMyCommands([
@@ -33,6 +39,7 @@ const start = () => {
   bot.on("callback_query", async (msg) => {
     const data = msg.data;
     const chatId = msg.message.chat.id;
+    await bot.deleteMessage(chatId, message[chatId]);
     if (data === "/again") {
       return startGame(chatId);
     }
