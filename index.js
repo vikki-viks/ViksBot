@@ -36,12 +36,12 @@ const start = () => {
     if (data === "/again") {
       return startGame(chatId);
     }
-    if (data === chats[chatId]) {
+    if (data === chats[chatId].toString()) {
       return bot.sendMessage(chatId, "Поздравляю!", againOptions);
     } else {
       return bot.sendMessage(
         chatId,
-        `Бот загад цифру ${chats[chatId]}`,
+        `Бот загадал цифру ${chats[chatId]}`,
         againOptions
       );
     }
