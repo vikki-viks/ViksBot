@@ -39,10 +39,10 @@ const start = () => {
   bot.on("callback_query", async (msg) => {
     const data = msg.data;
     const chatId = msg.message.chat.id;
-    await bot.deleteMessage(chatId, message[chatId]);
     if (data === "/again") {
       return startGame(chatId);
     }
+    await bot.deleteMessage(chatId, message[chatId]);
     if (data === chats[chatId].toString()) {
       return bot.sendMessage(chatId, "Поздравляю!", againOptions);
     } else {
