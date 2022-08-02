@@ -1,5 +1,6 @@
 require("dotenv").config();
 const Telegrambot = require("node-telegram-bot-api");
+const db = require("./db");
 
 const token = process.env.TOKEN;
 const chats = {};
@@ -9,7 +10,8 @@ const { gameOptions, againOptions } = require("./options");
 
 const startGame = async (chatId) => {
   const random = Math.floor(Math.random() * 10);
-  chats[chatId] = random;
+  db.set(chatId, random);
+  // chats[chatId] = random;
   const messageKeyBoard = await bot.sendMessage(
     chatId,
     "Отгадай цифру от 0 до 9",
