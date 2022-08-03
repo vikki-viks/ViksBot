@@ -10,14 +10,15 @@ const { gameOptions, againOptions } = require("./options");
 
 const startGame = async (chatId) => {
   const random = Math.floor(Math.random() * 10);
-  db.set("chat" + chatId, random);
+  await db.set("chat" + chatId, random);
   // chats[chatId] = random;
   const messageKeyBoard = await bot.sendMessage(
     chatId,
     "Отгадай цифру от 0 до 9",
     gameOptions
   );
-  message[chatId] = messageKeyBoard.message_id;
+  await db.set("message" + chatId, messageKeyBoard.message_id);
+  // message[chatId] =
 };
 const start = () => {
   bot.setMyCommands([
@@ -44,13 +45,13 @@ const start = () => {
     if (data === "/again") {
       return startGame(chatId);
     }
-    await bot.deleteMessage(chatId, message[chatId]);
-    if (data === chats[chatId].toString()) {
+    await bot.deleteMessage(chatId, await db.get("message" + chatId));
+    if (data === (await db.get("chats" + chatId).toString())) {
       return bot.sendMessage(chatId, "Поздравляю!", againOptions);
     } else {
       return bot.sendMessage(
         chatId,
-        `Бот загадал цифру ${chats[chatId]}`,
+        `Бот загадал цифру ${await db.get("chat" + chatId)}`,
         againOptions
       );
     }
