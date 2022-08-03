@@ -10,7 +10,7 @@ const { gameOptions, againOptions } = require("./options");
 
 const startGame = async (chatId) => {
   const random = Math.floor(Math.random() * 10);
-  db.set(chatId, random);
+  db.set("chat" + chatId, random);
   // chats[chatId] = random;
   const messageKeyBoard = await bot.sendMessage(
     chatId,
